@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>QR Code Generator</title>
+<link rel="stylesheet" href="style.css" />
+<!-- ใช้ qrcode.js จาก CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>QR Code Generator</h1>
+    <p class="subtitle">กรอก URL แล้วกดปุ่มเพื่อสร้าง QR Code ของคุณ</p>
+
+    <div class="card">
+        <input type="text" id="urlInput" placeholder="https://example.com" />
+        <button id="generateBtn" onclick="generateQR()">Generate</button>
+            <div id="qrArea">
+                <div class="footer-image">
+                    <img src="muan.jpg" alt="footer banner" />
+                </div>
+            </div>
+        <button id="downloadBtn" onclick="downloadQR()">⬇️ ดาวน์โหลด QR</button>
+    </div>
+
+    <footer>สร้างโดย</footer>
+    <!-- <div class="footer-image">
+    <img src="muan.jpg" alt="footer banner" />
+    </div> -->
+  </div>
+
+  <script>
+    let qr;
+    function generateQR() {
+      const url = document.getElementById("urlInput").value.trim();
+      const qrArea = document.getElementById("qrArea");
+      const downloadBtn = document.getElementById("downloadBtn");
+      qrArea.innerHTML = "";
+      downloadBtn.style.display = "none";
+
+      if (!url) {
+        alert("กรุณากรอก URL ก่อน");
+        return;
+      }
+
+      qr = new QRCode(qrArea, {
+        text: url,
+        width: 240,
+        height: 240,
+        correctLevel: QRCode.CorrectLevel.M
+      });
+
+      setTimeout(() => downloadBtn.style.display = "inline-block", 300);
+    }
+
+    function downloadQR() {
+      const canvas = document.querySelector("#qrArea canvas");
+      if (!canvas) return;
+      const link = document.createElement("a");
+      link.download = "qrcode.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    }
+  </script>
+</body>
+</html>
